@@ -11,7 +11,7 @@ Matrix::Matrix(vector<double> vec, int rows = 0, int columns = 0)
     for (size_t i = 0; i < this->rows; i++)
     {
         vector<double> temp;
-        for (size_t j = i*this->columns; j < (i+1)*this->columns; j++)
+        for (size_t j = i*(size_t)this->columns; j < (i+1)*(size_t)this->columns; j++)
         {
             temp.push_back(vec.at(j));
         }
@@ -48,7 +48,7 @@ Matrix& Matrix::operator+=(const double& num) // MAT += NUM
 {
     return *this;
 }
-const Matrix Matrix::operator++(int) // Postfix
+Matrix Matrix::operator++(int) const// Postfix
 {
     return *this;
 }
@@ -79,7 +79,7 @@ Matrix& Matrix::operator-=(const double& num) // MAT -= NUM
 {
     return *this;
 }
-const Matrix Matrix::operator--(int) // Postfix
+Matrix Matrix::operator--(int) const// Postfix
 {
     return *this;
 }
@@ -93,7 +93,7 @@ Matrix Matrix::operator-() const // unary
 }
 
 // multiplication
-Matrix operator*(const double& num, const Matrix& mat) // NUM * MAT
+Matrix zich::operator*(const double& num, const Matrix& mat) // NUM * MAT
 {
     vector<double> temp;
     return Matrix{temp, 0, 0};
@@ -112,7 +112,7 @@ Matrix& Matrix::operator*=(const double& num) // MAT *= NUM
 }
 
 // division
-Matrix operator/(const double& num, const Matrix& mat) // NUM / MAT
+Matrix zich::operator/(const double& num, const Matrix& mat) // NUM / MAT
 {
     vector<double> temp;
     return Matrix{temp, 0, 0};
@@ -132,11 +132,13 @@ ostream& zich::operator<<(ostream& os, const Matrix& mat)
     string out;
     for (size_t i = 0; i < mat.rows; i++)
     {
+        out += '[';
         for (size_t j = 0; j < mat.columns; j++)
         {
-            out += mat.matrix.at(i).at(j);
+            out += mat.matrix.at(i).at(j) + ' ';
         }
-        out += '\n';
+        out += "]\n";
     }
     os << out << endl;
+    return os;
 }

@@ -20,7 +20,7 @@ namespace zich
         Matrix operator+(const Matrix& mat); // MAT + MAT
         Matrix operator+(const double& num); // MAT + NUM
         Matrix& operator+=(const double& num); // MAT += NUM
-        const Matrix operator++(int); // Postfix
+        Matrix operator++(int) const; // Postfix
         Matrix& operator++(); // Prefix
         Matrix operator+() const; // unary
 
@@ -29,7 +29,7 @@ namespace zich
         Matrix operator-(const Matrix& mat); // MAT - MAT
         Matrix operator-(const double& num); // MAT - NUM
         Matrix& operator-=(const double& num); // MAT -= NUM
-        const Matrix operator--(int); // Postfix
+        Matrix operator--(int) const; // Postfix
         Matrix& operator--(); // Prefix
         Matrix operator-() const; // unary
         
