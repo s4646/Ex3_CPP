@@ -1,3 +1,4 @@
+#pragma once
 #include <iostream>
 #include <vector>
 
@@ -43,8 +44,7 @@ namespace zich
         Matrix operator/(const double& num); // MAT / NUM
         Matrix& operator/=(const double& num); // MAT /= NUM
         
-        // input output
+        // extraction
         friend std::ostream& operator<<(std::ostream& os, const Matrix& mat);
-        friend std::istream& operator>>(std::istream& is, const Matrix& mat);
     };
 }

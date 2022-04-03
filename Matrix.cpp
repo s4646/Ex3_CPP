@@ -1,4 +1,5 @@
 #include "Matrix.hpp"
+#include <string>
 
 using namespace std;
 using namespace zich;
@@ -89,4 +90,53 @@ Matrix& Matrix::operator--() // Prefix
 Matrix Matrix::operator-() const // unary
 {
     return *this;
+}
+
+// multiplication
+Matrix operator*(const double& num, const Matrix& mat) // NUM * MAT
+{
+    vector<double> temp;
+    return Matrix{temp, 0, 0};
+} 
+Matrix Matrix::operator*(const Matrix& mat) // MAT * MAT
+{
+    return *this;
+}
+Matrix Matrix::operator*(const double& num) // MAT * NUM
+{
+    return *this;
+}
+Matrix& Matrix::operator*=(const double& num) // MAT *= NUM
+{
+    return *this;
+}
+
+// division
+Matrix operator/(const double& num, const Matrix& mat) // NUM / MAT
+{
+    vector<double> temp;
+    return Matrix{temp, 0, 0};
+}
+Matrix Matrix::operator/(const double& num) // MAT / NUM
+{
+    return *this;
+}
+Matrix& Matrix::operator/=(const double& num) // MAT /= NUM
+{
+    return *this;
+}
+
+// input & output
+ostream& zich::operator<<(ostream& os, const Matrix& mat)
+{
+    string out;
+    for (size_t i = 0; i < mat.rows; i++)
+    {
+        for (size_t j = 0; j < mat.columns; j++)
+        {
+            out += mat.matrix.at(i).at(j);
+        }
+        out += '\n';
+    }
+    os << out << endl;
 }
