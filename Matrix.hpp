@@ -1,3 +1,4 @@
+#include <iostream>
 #include <vector>
 
 namespace zich
@@ -10,9 +11,10 @@ namespace zich
 
     public:
         Matrix(std::vector<double> vec, int rows, int columns);
+        Matrix(const Matrix& other);
          ~Matrix();
-        // addition
         
+        // addition
         friend Matrix operator+(const double& num, const Matrix& mat); // NUM + MAT
         Matrix operator+(const Matrix& mat); // MAT + MAT
         Matrix operator+(const double& num); // MAT + NUM
@@ -20,13 +22,7 @@ namespace zich
         const Matrix operator++(int); // Postfix
         Matrix& operator++(); // Prefix
         Matrix operator+() const; // unary
-        
-        // multiplication
-        friend Matrix operator*(const double& num, const Matrix& mat); // NUM * MAT
-        Matrix operator*(const Matrix& mat); // MAT * MAT
-        Matrix operator*(const double& num); // MAT * NUM
-        Matrix& operator*=(const double& num); // MAT *= NUM
-        
+
         // substraction
         friend Matrix operator-(const double& num, const Matrix& mat); // NUM - MAT
         Matrix operator-(const Matrix& mat); // MAT - MAT
@@ -36,6 +32,12 @@ namespace zich
         Matrix& operator--(); // Prefix
         Matrix operator-() const; // unary
         
+        // multiplication
+        friend Matrix operator*(const double& num, const Matrix& mat); // NUM * MAT
+        Matrix operator*(const Matrix& mat); // MAT * MAT
+        Matrix operator*(const double& num); // MAT * NUM
+        Matrix& operator*=(const double& num); // MAT *= NUM
+        
         // division
         friend Matrix operator/(const double& num, const Matrix& mat); // NUM / MAT
         Matrix operator/(const double& num); // MAT / NUM
@@ -43,6 +45,6 @@ namespace zich
         
         // input output
         friend std::ostream& operator<<(std::ostream& os, const Matrix& mat);
-        friend std::istream& operator>>(std::istream& os, const Matrix& mat);
+        friend std::istream& operator>>(std::istream& is, const Matrix& mat);
     };
 }
