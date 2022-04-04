@@ -2,9 +2,8 @@
 #include <string>
 
 using namespace std;
-using namespace zich;
 
-Matrix::Matrix(vector<double> vec, int rows = 0, int columns = 0)
+zich::Matrix::Matrix(vector<double> vec, int rows = 0, int columns = 0)
 {
     this->rows = rows;
     this->columns = columns;
@@ -18,7 +17,7 @@ Matrix::Matrix(vector<double> vec, int rows = 0, int columns = 0)
         this->matrix.push_back(temp);
     }
 }
-Matrix::Matrix(const Matrix& other)
+zich::Matrix::Matrix(const Matrix& other)
 {
     this->rows = other.rows;
     this->columns = other.columns;
@@ -28,117 +27,134 @@ Matrix::Matrix(const Matrix& other)
         this->matrix.push_back(vec);
     }
 }
-Matrix::~Matrix() {};
+zich::Matrix::~Matrix() {};
 
-// addition
-Matrix operator+(const double& num, const Matrix& mat) // NUM + MAT
+namespace zich
 {
-    vector<double> temp;
-    return Matrix{temp, 0, 0};
-}
-Matrix Matrix::operator+(const Matrix& mat) // MAT + MAT
-{
-    return *this;
-}
-Matrix Matrix::operator+(const double& num) // MAT + NUM
-{
-    return *this;
-}
-Matrix& Matrix::operator+=(const double& num) // MAT += NUM
-{
-    return *this;
-}
-Matrix Matrix::operator++(int) const// Postfix
-{
-    return *this;
-}
-Matrix& Matrix::operator++() // Prefix
-{
-    return *this;
-}
-Matrix Matrix::operator+() const // unary
-{
-    return *this;
-}
-
-// substraction
-Matrix operator-(const double& num, const Matrix& mat) // NUM - MAT
-{
-    vector<double> temp;
-    return Matrix{temp, 0, 0};
-}
-Matrix Matrix::operator-(const Matrix& mat) // MAT - MAT
-{
-    return *this;
-}
-Matrix Matrix::operator-(const double& num) // MAT - NUM
-{
-    return *this;
-}
-Matrix& Matrix::operator-=(const double& num) // MAT -= NUM
-{
-    return *this;
-}
-Matrix Matrix::operator--(int) const// Postfix
-{
-    return *this;
-}
-Matrix& Matrix::operator--() // Prefix
-{
-    return *this;
-}
-Matrix Matrix::operator-() const // unary
-{
-    return *this;
-}
-
-// multiplication
-Matrix zich::operator*(const double& num, const Matrix& mat) // NUM * MAT
-{
-    vector<double> temp;
-    return Matrix{temp, 0, 0};
-} 
-Matrix Matrix::operator*(const Matrix& mat) // MAT * MAT
-{
-    return *this;
-}
-Matrix Matrix::operator*(const double& num) // MAT * NUM
-{
-    return *this;
-}
-Matrix& Matrix::operator*=(const double& num) // MAT *= NUM
-{
-    return *this;
-}
-
-// division
-Matrix zich::operator/(const double& num, const Matrix& mat) // NUM / MAT
-{
-    vector<double> temp;
-    return Matrix{temp, 0, 0};
-}
-Matrix Matrix::operator/(const double& num) // MAT / NUM
-{
-    return *this;
-}
-Matrix& Matrix::operator/=(const double& num) // MAT /= NUM
-{
-    return *this;
-}
-
-// input & output
-ostream& zich::operator<<(ostream& os, const Matrix& mat)
-{
-    string out;
-    for (size_t i = 0; i < mat.rows; i++)
+    // addition
+    Matrix operator+(const double& num, const Matrix& mat) // NUM + MAT
     {
-        out += '[';
-        for (size_t j = 0; j < mat.columns; j++)
-        {
-            out += mat.matrix.at(i).at(j) + ' ';
-        }
-        out += "]\n";
+        vector<double> temp;
+        return Matrix{temp, 0, 0};
     }
-    os << out << endl;
-    return os;
+    Matrix Matrix::operator+(const Matrix& mat) // MAT + MAT
+    {
+        return *this;
+    }
+    Matrix Matrix::operator+(const double& num) // MAT + NUM
+    {
+        return *this;
+    }
+    Matrix& Matrix::operator+=(const double& num) // MAT += NUM
+    {
+        return *this;
+    }
+    const Matrix Matrix::operator++(int)// Postfix
+    {
+        return *this;
+    }
+    Matrix& Matrix::operator++() // Prefix
+    {
+        return *this;
+    }
+    Matrix Matrix::operator+() const // unary
+    {
+        return *this;
+    }
+
+    // substraction
+    Matrix operator-(const double& num, const Matrix& mat) // NUM - MAT
+    {
+        vector<double> temp;
+        return Matrix{temp, 0, 0};
+    }
+    Matrix Matrix::operator-(const Matrix& mat) // MAT - MAT
+    {
+        return *this;
+    }
+    Matrix Matrix::operator-(const double& num) // MAT - NUM
+    {
+        return *this;
+    }
+    Matrix& Matrix::operator-=(const double& num) // MAT -= NUM
+    {
+        return *this;
+    }
+    const Matrix Matrix::operator--(int)// Postfix
+    {
+        return *this;
+    }
+    Matrix& Matrix::operator--() // Prefix
+    {
+        return *this;
+    }
+    Matrix Matrix::operator-() const // unary
+    {
+        return *this;
+    }
+
+    // multiplication
+    Matrix operator*(const double& num, const Matrix& mat) // NUM * MAT
+    {
+        vector<double> temp;
+        return Matrix{temp, 0, 0};
+    } 
+    Matrix Matrix::operator*(const Matrix& mat) // MAT * MAT
+    {
+        return *this;
+    }
+    Matrix Matrix::operator*(const double& num) // MAT * NUM
+    {
+        return *this;
+    }
+    Matrix& Matrix::operator*=(const double& num) // MAT *= NUM
+    {
+        return *this;
+    }
+
+    // division
+    Matrix operator/(const double& num, const Matrix& mat) // NUM / MAT
+    {
+        vector<double> temp;
+        return Matrix{temp, 0, 0};
+    }
+    Matrix Matrix::operator/(const double& num) // MAT / NUM
+    {
+        return *this;
+    }
+    Matrix& Matrix::operator/=(const double& num) // MAT /= NUM
+    {
+        return *this;
+    }
+
+    // compare
+    bool Matrix::operator==(const Matrix& mat) const
+    {
+        return true;
+    }
+    bool Matrix::operator<=(const Matrix& mat) const
+    {
+        return true;
+    }
+    bool Matrix::operator>=(const Matrix& mat) const
+    {
+        return true;
+    }
+
+    // input & output
+    ostream& operator<<(ostream& os, const Matrix& mat)
+    {
+        string out;
+        for (size_t i = 0; i < mat.rows; i++)
+        {
+            out += '[';
+            for (size_t j = 0; j < mat.columns; j++)
+            {
+                out += mat.matrix.at(i).at(j) + ' ';
+            }
+            out += "]\n";
+        }
+        os << out << endl;
+        return os;
+    }
 }
