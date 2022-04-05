@@ -48,6 +48,7 @@ namespace zich
         bool operator==(const Matrix& mat) const;
         bool operator<=(const Matrix& mat) const;
         bool operator>=(const Matrix& mat) const;
+        bool operator!=(const Matrix& mat) const;
         
         // extraction
         friend std::ostream& operator<<(std::ostream& os, const Matrix& mat);
