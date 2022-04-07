@@ -185,16 +185,67 @@ namespace zich
         Matrix newMat(mat);
         newMat *= num;
         return newMat;
-    } 
-    Matrix Matrix::operator*(const Matrix& mat) // MAT * MAT
-    {
-        return *this;
     }
     Matrix Matrix::operator*(const double& num) // MAT * NUM
     {
         Matrix newMat(*this);
         newMat *= num;
         return newMat;
+    }
+    Matrix Matrix::operator*(const Matrix& mat) // MAT * MAT
+    { // code was taken from https://stackoverflow.com/questions/26826545/matrix-multiplication-using-vector
+        if(this->rows!= mat.columns)
+        {
+            throw runtime_error("Matrices don't have the same size");
+        }
+        
+        int n = this->rows;     // a rows
+        int m = this->columns;  // a cols
+        int p = mat.columns;  // b cols
+        vector<double> mul((size_t)(n*p), 0.0);
+        double tempItem;
+
+        for (size_t j = 0; j < p; ++j)
+        {
+            for (size_t k = 0; k < m; ++k)
+            {
+                tempItem = 0;
+                for (size_t i = 0; i < n; ++i)
+                {
+                    tempItem += this->matrix.at(i*(size_t)this->columns + k) * mat.matrix.at(k*(size_t)mat.columns + j);
+                }
+                mul.push_back(tempItem);
+            }
+        }   
+        return Matrix(mul,n,p);
+    }
+    Matrix& Matrix::operator*=(const Matrix& mat) // MAT * MAT
+    { // code was taken from https://stackoverflow.com/questions/26826545/matrix-multiplication-using-vector
+        if(this->rows!= mat.columns)
+        {
+            throw runtime_error("Matrices don't have the same size");
+        }
+        
+        int n = this->rows;     // a rows
+        int m = this->columns;  // a cols
+        int p = mat.columns;  // b cols
+        vector<double> mul((size_t)(n*p), 0.0);
+        double tempItem;
+
+        for (size_t j = 0; j < p; ++j)
+        {
+            for (size_t k = 0; k < m; ++k)
+            {
+                tempItem = 0;
+                for (size_t i = 0; i < n; ++i)
+                {
+                    tempItem += this->matrix.at(i*(size_t)this->columns + k) * mat.matrix.at(k*(size_t)mat.columns + j);
+                }
+                mul.push_back(tempItem);
+            }
+        }
+        *this = Matrix(mul,n,p);
+        return *this;
     }
     Matrix& Matrix::operator*=(const double& num) // MAT *= NUM
     {
@@ -209,21 +260,41 @@ namespace zich
     // division
     Matrix operator/(const double& num, const Matrix& mat) // NUM / MAT
     {
+        if (num == 0)
+        {
+            throw runtime_error("Cannot divide by 0");
+        }
         return (1/num) * mat;
     }
     Matrix Matrix::operator/(const double& num) // MAT / NUM
     {
+        if (num == 0)
+        {
+            throw runtime_error("Cannot divide by 0");
+        }
         return *this * (1/num);
     }
     Matrix& Matrix::operator/=(const double& num) // MAT /= NUM
     {
+        if (num == 0)
+        {
+            throw runtime_error("Cannot divide by 0");
+        }
         return *this *= (1/num);
     }
 
     // compare
     bool Matrix::operator==(const Matrix& mat) const // MAT == MAT
     {
-        return matSum(*this) - matSum(mat) < EPSILON;
+        unsigned int size = this->matrix.size();
+        for (size_t i = 0; i < size; i++)
+        {
+            if(this->matrix.at(i) - mat.matrix.at(i) > EPSILON)
+            {
+                return false;
+            }
+        }
+        return true;
     }
     bool Matrix::operator<=(const Matrix& mat) const // MAT <= MAT
     {
@@ -237,7 +308,7 @@ namespace zich
     }
     bool Matrix::operator!=(const Matrix& mat) const // MAT != MAT
     {
-        return matSum(*this) - matSum(mat) > EPSILON;
+        return !(*this == mat);
     }
     bool Matrix::operator<(const Matrix& mat) const // MAT < MAT
     {
@@ -249,7 +320,6 @@ namespace zich
         double sum1 = matSum(*this); double sum2 = matSum(mat);
         return sum1 > sum2 && sum1-sum2 > EPSILON;
     }
-
 
     // input & output
     ostream& operator<<(ostream& os, const Matrix& mat)

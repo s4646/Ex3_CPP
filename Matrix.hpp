@@ -41,6 +41,7 @@ namespace zich
         Matrix operator*(const Matrix& mat); // MAT * MAT
         Matrix operator*(const double& num); // MAT * NUM
         Matrix& operator*=(const double& num); // MAT *= NUM
+        Matrix& operator*=(const Matrix& mat); // MAT *= MAT
         
         // division
         friend Matrix operator/(const double& num, const Matrix& mat); // NUM / MAT
