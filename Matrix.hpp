@@ -14,7 +14,7 @@ namespace zich
     public:
         Matrix(std::vector<double> vec, int rows, int columns);
         Matrix(const Matrix& other);
-         ~Matrix();
+        ~Matrix();
         
         // addition
         friend Matrix operator+(const double& num, const Matrix& mat); // NUM + MAT

@@ -75,7 +75,7 @@ namespace zich
         }
         return *this;
     }
-    Matrix Matrix::operator++(int)// Postfix
+    Matrix Matrix::operator++(int) // Postfix
     {
         Matrix temp = *this;
         ++*this;
@@ -182,8 +182,9 @@ namespace zich
     // multiplication
     Matrix operator*(const double& num, const Matrix& mat) // NUM * MAT
     {
-        vector<double> temp;
-        return Matrix{temp, 0, 0};
+        Matrix newMat(mat);
+        newMat *= num;
+        return newMat;
     } 
     Matrix Matrix::operator*(const Matrix& mat) // MAT * MAT
     {
@@ -191,26 +192,32 @@ namespace zich
     }
     Matrix Matrix::operator*(const double& num) // MAT * NUM
     {
-        return *this;
+        Matrix newMat(*this);
+        newMat *= num;
+        return newMat;
     }
     Matrix& Matrix::operator*=(const double& num) // MAT *= NUM
     {
+        unsigned int size = this->matrix.size();
+        for (size_t i = 0; i < size; i++)
+        {
+            this->matrix.at(i) *= num;
+        }
         return *this;
     }
 
     // division
     Matrix operator/(const double& num, const Matrix& mat) // NUM / MAT
     {
-        vector<double> temp;
-        return Matrix{temp, 0, 0};
+        return (1/num) * mat;
     }
     Matrix Matrix::operator/(const double& num) // MAT / NUM
     {
-        return *this;
+        return *this * (1/num);
     }
     Matrix& Matrix::operator/=(const double& num) // MAT /= NUM
     {
-        return *this;
+        return *this *= (1/num);
     }
 
     // compare
