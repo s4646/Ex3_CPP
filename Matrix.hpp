@@ -1,6 +1,7 @@
 #pragma once
 #include <iostream>
 #include <vector>
+#define EPSILON 0.00000000000001
 
 namespace zich
 {

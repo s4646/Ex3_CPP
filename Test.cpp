@@ -24,7 +24,7 @@ TEST_CASE("GOOD INPUT")
             CHECK(allIxI == all4x4_1);
             if(i%2 == 0)
             {
-                all4x4_1 = all4x4_1++;
+                all4x4_1++;
             }
             else
             {
@@ -91,7 +91,7 @@ TEST_CASE("GOOD INPUT")
             CHECK(allIxI == all4x4_1);
             if(i%2 == 0)
             {
-                 all4x4_1 = all4x4_1--;
+                all4x4_1--;
             }
             else
             {
@@ -137,10 +137,11 @@ TEST_CASE("GOOD INPUT")
         Matrix constants2x2{const2x2, 2, 2};
         Matrix minusConstants2x2{minusConst2x2, 2, 2};
         
-        CHECK(constants2x2 == -constants2x2);
+        CHECK(constants2x2 == -minusConstants2x2);
 
         constants2x2-=5;
-        CHECK(constants2x2 == Matrix{vector<double>{-2.14,-3.71,-4.41,-4.61}, 2, 2});
+        Matrix temp{vector<double>{-1.86,-2.29,-3.59,-3.39}, 2, 2};
+        CHECK(constants2x2 == Matrix{vector<double>{-1.86,-2.29,-3.59,-3.39}, 2, 2});
     }
     // SUBCASE("MULTIPLICATION")
     // {

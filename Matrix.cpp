@@ -1,4 +1,5 @@
 #include "Matrix.hpp"
+#include <stdexcept>
 
 using namespace std;
 
@@ -21,7 +22,7 @@ namespace zich
     // addition
     Matrix operator+(const double& num, const Matrix& mat) // NUM + MAT
     {
-        Matrix newMat(mat.matrix, mat.rows, mat.columns);
+        Matrix newMat(mat);
         unsigned int size = newMat.matrix.size();
         for (size_t i = 0; i < size; i++)
         {
@@ -36,14 +37,14 @@ namespace zich
             throw runtime_error("Matrices don't have the same size");
         }
 
-        Matrix newMat(this->matrix, this->rows, this->columns);
+        Matrix newMat(*this);
         newMat += mat;
         return newMat;
     }
 
     Matrix Matrix::operator+(const double& num) // MAT + NUM
     {
-        Matrix newMat(this->matrix,this->rows,this->columns);
+        Matrix newMat(*this);
         unsigned int size = newMat.matrix.size();
         for (size_t i = 0; i < size; i++)
         {
@@ -76,9 +77,9 @@ namespace zich
     }
     Matrix Matrix::operator++(int)// Postfix
     {
-        Matrix newMat(this->matrix, this->rows, this->columns);
-        newMat += 1;
-        return newMat;
+        Matrix temp = *this;
+        ++*this;
+        return temp;
     }
     Matrix& Matrix::operator++() // Prefix
     {
@@ -87,7 +88,7 @@ namespace zich
     }
     Matrix Matrix::operator+() const // unary
     {
-        Matrix newMat(this->matrix, this->rows, this->columns);
+        Matrix newMat(*this);
         unsigned int size = this->matrix.size();
         for (size_t i = 0; i < size; i++)
         {
@@ -99,7 +100,7 @@ namespace zich
     // substraction
         Matrix operator-(const double& num, const Matrix& mat) // NUM - MAT
     {
-        Matrix newMat(mat.matrix, mat.rows, mat.columns);
+        Matrix newMat(mat);
         unsigned int size = newMat.matrix.size();
         for (size_t i = 0; i < size; i++)
         {
@@ -114,7 +115,7 @@ namespace zich
             throw runtime_error("Matrices don't have the same size");
         }
 
-        Matrix newMat(this->matrix, this->rows, this->columns);
+        Matrix newMat(*this);
         newMat -= mat;
         return newMat;
     }
@@ -152,15 +153,15 @@ namespace zich
         }
         return *this;
     }
-    Matrix Matrix::operator--(int)// Postfix
+    Matrix Matrix::operator--(int) // Postfix
     {
-        Matrix newMat(this->matrix, this->rows, this->columns);
-        newMat += 1;
-        return newMat;
+        Matrix temp = *this;
+        --*this;
+        return temp;
     }
     Matrix& Matrix::operator--() // Prefix
     {
-        *this += 1;
+        *this -= 1;
         return *this;
     }
     Matrix Matrix::operator-() const // unary
@@ -215,27 +216,31 @@ namespace zich
     // compare
     bool Matrix::operator==(const Matrix& mat) const // MAT == MAT
     {
-        return matSum(*this) == matSum(mat);
+        return matSum(*this) - matSum(mat) < EPSILON;
     }
     bool Matrix::operator<=(const Matrix& mat) const // MAT <= MAT
     {
-        return matSum(*this) <= matSum(mat);
+        double sum1 = matSum(*this); double sum2 = matSum(mat);
+        return sum1 < sum2 || sum1-sum2 < EPSILON;
     }
     bool Matrix::operator>=(const Matrix& mat) const // MAT >= MAT
     {
-        return matSum(*this) >= matSum(mat);
+        double sum1 = matSum(*this); double sum2 = matSum(mat);
+        return sum1 > sum2 || sum1-sum2 < EPSILON;
     }
     bool Matrix::operator!=(const Matrix& mat) const // MAT != MAT
     {
-        return matSum(*this) != matSum(mat);
+        return matSum(*this) - matSum(mat) > EPSILON;
     }
     bool Matrix::operator<(const Matrix& mat) const // MAT < MAT
     {
-        return matSum(*this) < matSum(mat);
+        double sum1 = matSum(*this); double sum2 = matSum(mat);
+        return sum1 < sum2 && sum1-sum2 > EPSILON;
     }
     bool Matrix::operator>(const Matrix& mat) const // MAT > MAT
     {
-        return matSum(*this) > matSum(mat);
+        double sum1 = matSum(*this); double sum2 = matSum(mat);
+        return sum1 > sum2 && sum1-sum2 > EPSILON;
     }
 
 
