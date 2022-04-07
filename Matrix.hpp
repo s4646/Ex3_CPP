@@ -21,7 +21,7 @@ namespace zich
         Matrix& operator+=(const double& num); // MAT += num
         Matrix operator+(const Matrix& mat); // MAT + MAT
         Matrix& operator+=(const Matrix& mat); // MAT += MAT
-        const Matrix operator++(int); // Postfix
+        Matrix operator++(int); // Postfix
         Matrix& operator++(); // Prefix
         Matrix operator+() const; // unary
 
@@ -31,7 +31,7 @@ namespace zich
         Matrix& operator-=(const double& num); // MAT -= num
         Matrix operator-(const Matrix& mat); // MAT - MAT
         Matrix& operator-=(const Matrix& mat); // MAT -= MAT
-        const Matrix operator--(int); // Postfix
+        Matrix operator--(int); // Postfix
         Matrix& operator--(); // Prefix
         Matrix operator-() const; // unary
         
@@ -49,10 +49,16 @@ namespace zich
         // compare
         bool operator==(const Matrix& mat) const;
         bool operator<=(const Matrix& mat) const;
+        bool operator<(const Matrix& mat) const;
         bool operator>=(const Matrix& mat) const;
+        bool operator>(const Matrix& mat) const;
         bool operator!=(const Matrix& mat) const;
         
-        // extraction
+        // insertion & extraction
         friend std::ostream& operator<<(std::ostream& os, const Matrix& mat);
+        friend std::istream& operator<<(std::istream& os, const Matrix& mat);
+
+        // utils
+        friend double matSum(const Matrix& mat);
     };
 }

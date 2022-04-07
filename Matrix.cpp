@@ -1,5 +1,4 @@
 #include "Matrix.hpp"
-#include <string>
 
 using namespace std;
 
@@ -7,7 +6,7 @@ zich::Matrix::Matrix(vector<double> vec, int rows = 0, int columns = 0)
 {
     this->rows = rows;
     this->columns = columns;
-    this->matrix = vector<double>(vec);
+    this->matrix = vector<double>(std::move(vec));
 }
 zich::Matrix::Matrix(const Matrix& other)
 {
@@ -32,8 +31,12 @@ namespace zich
     }
     Matrix Matrix::operator+(const Matrix& mat) // MAT + MAT
     {
+        if(this->rows!= mat.rows || this->columns !=mat.columns)
+        {
+            throw runtime_error("Matrices don't have the same size");
+        }
+
         Matrix newMat(this->matrix, this->rows, this->columns);
-        unsigned int rowSize = newMat.matrix.size();
         newMat += mat;
         return newMat;
     }
@@ -50,6 +53,11 @@ namespace zich
     }
     Matrix& Matrix::operator+=(const Matrix& mat) // MAT += MAT
     {
+        if(this->rows!= mat.rows || this->columns !=mat.columns)
+        {
+            throw runtime_error("Matrices don't have the same size");
+        }
+
         unsigned int size = this->matrix.size();
         for (size_t i = 0; i < size; i++)
         {
@@ -66,23 +74,15 @@ namespace zich
         }
         return *this;
     }
-    const Matrix Matrix::operator++(int)// Postfix
+    Matrix Matrix::operator++(int)// Postfix
     {
         Matrix newMat(this->matrix, this->rows, this->columns);
-        unsigned int size = this->matrix.size();
-        for (size_t i = 0; i < size; i++)
-        {
-            newMat.matrix.at(i) += 1;
-        }
+        newMat += 1;
         return newMat;
     }
     Matrix& Matrix::operator++() // Prefix
     {
-        unsigned int size = this->matrix.size();
-        for (size_t i = 0; i < size; i++)
-        {
-            this->matrix.at(i) += 1;
-        }
+        *this += 1;
         return *this;
     }
     Matrix Matrix::operator+() const // unary
@@ -109,8 +109,12 @@ namespace zich
     }
     Matrix Matrix::operator-(const Matrix& mat) // MAT - MAT
     {
+        if(this->rows!= mat.rows || this->columns !=mat.columns)
+        {
+            throw runtime_error("Matrices don't have the same size");
+        }
+
         Matrix newMat(this->matrix, this->rows, this->columns);
-        unsigned int rowSize = newMat.matrix.size();
         newMat -= mat;
         return newMat;
     }
@@ -127,6 +131,11 @@ namespace zich
     }
     Matrix& Matrix::operator-=(const Matrix& mat) // MAT -= MAT
     {
+        if(this->rows!= mat.rows || this->columns !=mat.columns)
+        {
+            throw runtime_error("Matrices don't have the same size");
+        }
+        
         unsigned int size = this->matrix.size();
         for (size_t i = 0; i < size; i++)
         {
@@ -143,23 +152,15 @@ namespace zich
         }
         return *this;
     }
-    const Matrix Matrix::operator--(int)// Postfix
+    Matrix Matrix::operator--(int)// Postfix
     {
         Matrix newMat(this->matrix, this->rows, this->columns);
-        unsigned int size = this->matrix.size();
-        for (size_t i = 0; i < size; i++)
-        {
-            newMat.matrix.at(i) -= 1;
-        }
+        newMat += 1;
         return newMat;
     }
     Matrix& Matrix::operator--() // Prefix
     {
-        unsigned int size = this->matrix.size();
-        for (size_t i = 0; i < size; i++)
-        {
-            this->matrix.at(i) -= 1;
-        }
+        *this += 1;
         return *this;
     }
     Matrix Matrix::operator-() const // unary
@@ -168,6 +169,10 @@ namespace zich
         unsigned int size = this->matrix.size();
         for (size_t i = 0; i < size; i++)
         {
+            if(newMat.matrix.at(i) == 0)
+            {
+                continue;
+            }
             newMat.matrix.at(i) = -this->matrix.at(i);
         }
         return newMat;
@@ -208,18 +213,31 @@ namespace zich
     }
 
     // compare
-    bool Matrix::operator==(const Matrix& mat) const
+    bool Matrix::operator==(const Matrix& mat) const // MAT == MAT
     {
-        return true;
+        return matSum(*this) == matSum(mat);
     }
-    bool Matrix::operator<=(const Matrix& mat) const
+    bool Matrix::operator<=(const Matrix& mat) const // MAT <= MAT
     {
-        return true;
+        return matSum(*this) <= matSum(mat);
     }
-    bool Matrix::operator>=(const Matrix& mat) const
+    bool Matrix::operator>=(const Matrix& mat) const // MAT >= MAT
     {
-        return true;
+        return matSum(*this) >= matSum(mat);
     }
+    bool Matrix::operator!=(const Matrix& mat) const // MAT != MAT
+    {
+        return matSum(*this) != matSum(mat);
+    }
+    bool Matrix::operator<(const Matrix& mat) const // MAT < MAT
+    {
+        return matSum(*this) < matSum(mat);
+    }
+    bool Matrix::operator>(const Matrix& mat) const // MAT > MAT
+    {
+        return matSum(*this) > matSum(mat);
+    }
+
 
     // input & output
     ostream& operator<<(ostream& os, const Matrix& mat)
@@ -238,5 +256,17 @@ namespace zich
             os << "]\n";
         }
             return os;
+    }
+
+    // utils
+    double matSum(const Matrix& mat)
+    {
+        unsigned int size = mat.matrix.size();
+        double sum = 0;
+        for (size_t i = 0; i < size; i++)
+        {
+            sum += mat.matrix.at(i);
+        }
+        return sum;
     }
 }
