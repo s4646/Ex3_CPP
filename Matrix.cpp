@@ -20,14 +20,29 @@ zich::Matrix::~Matrix() {};
 namespace zich
 {
     // addition
-    Matrix operator+(const double& num, const Matrix& mat) // NUM + MAT
+    Matrix Matrix::operator+(const double& num) // MAT + NUM
     {
-        Matrix newMat(mat);
+        Matrix newMat(*this);
         unsigned int size = newMat.matrix.size();
         for (size_t i = 0; i < size; i++)
         {
             newMat.matrix.at(i) += num;
         }
+        return newMat;
+    }
+    Matrix& Matrix::operator+=(const double& num) // MAT += NUM
+    {
+        unsigned int size = this->matrix.size();
+        for (size_t i = 0; i < size; i++)
+        {
+            this->matrix.at(i) += num;
+        }
+        return *this;
+    }
+    Matrix operator+(const double& num, const Matrix& mat) // NUM + MAT
+    {
+        Matrix newMat(mat);
+        newMat + num;
         return newMat;
     }
     Matrix Matrix::operator+(const Matrix& mat) // MAT + MAT
@@ -41,17 +56,6 @@ namespace zich
         newMat += mat;
         return newMat;
     }
-
-    Matrix Matrix::operator+(const double& num) // MAT + NUM
-    {
-        Matrix newMat(*this);
-        unsigned int size = newMat.matrix.size();
-        for (size_t i = 0; i < size; i++)
-        {
-            newMat.matrix.at(i) += num;
-        }
-        return newMat;
-    }
     Matrix& Matrix::operator+=(const Matrix& mat) // MAT += MAT
     {
         if(this->rows!= mat.rows || this->columns !=mat.columns)
@@ -63,15 +67,6 @@ namespace zich
         for (size_t i = 0; i < size; i++)
         {
             this->matrix.at(i) += mat.matrix.at(i);
-        }
-        return *this;
-    }
-    Matrix& Matrix::operator+=(const double& num) // MAT += NUM
-    {
-        unsigned int size = this->matrix.size();
-        for (size_t i = 0; i < size; i++)
-        {
-            this->matrix.at(i) += num;
         }
         return *this;
     }
@@ -98,14 +93,29 @@ namespace zich
     }
 
     // substraction
-        Matrix operator-(const double& num, const Matrix& mat) // NUM - MAT
+        Matrix Matrix::operator-(const double& num) // MAT - NUM
     {
-        Matrix newMat(mat);
+        Matrix newMat(*this);
         unsigned int size = newMat.matrix.size();
         for (size_t i = 0; i < size; i++)
         {
             newMat.matrix.at(i) -= num;
         }
+        return newMat;
+    }
+    Matrix& Matrix::operator-=(const double& num) // MAT -= NUM
+    {
+        unsigned int size = this->matrix.size();
+        for (size_t i = 0; i < size; i++)
+        {
+            this->matrix.at(i) -= num;
+        }
+        return *this;
+    }
+    Matrix operator-(const double& num, const Matrix& mat) // NUM - MAT
+    {
+        Matrix newMat(mat);
+        -(newMat - num);
         return newMat;
     }
     Matrix Matrix::operator-(const Matrix& mat) // MAT - MAT
@@ -119,37 +129,17 @@ namespace zich
         newMat -= mat;
         return newMat;
     }
-
-    Matrix Matrix::operator-(const double& num) // MAT - NUM
-    {
-        Matrix newMat(this->matrix,this->rows,this->columns);
-        unsigned int size = newMat.matrix.size();
-        for (size_t i = 0; i < size; i++)
-        {
-            newMat.matrix.at(i) += num;
-        }
-        return newMat;
-    }
     Matrix& Matrix::operator-=(const Matrix& mat) // MAT -= MAT
     {
         if(this->rows!= mat.rows || this->columns !=mat.columns)
         {
             throw runtime_error("Matrices don't have the same size");
         }
-        
+
         unsigned int size = this->matrix.size();
         for (size_t i = 0; i < size; i++)
         {
             this->matrix.at(i) -= mat.matrix.at(i);
-        }
-        return *this;
-    }
-    Matrix& Matrix::operator-=(const double& num) // MAT -= NUM
-    {
-        unsigned int size = this->matrix.size();
-        for (size_t i = 0; i < size; i++)
-        {
-            this->matrix.at(i) -= num;
         }
         return *this;
     }
@@ -166,11 +156,11 @@ namespace zich
     }
     Matrix Matrix::operator-() const // unary
     {
-        Matrix newMat(this->matrix, this->rows, this->columns);
+        Matrix newMat(*this);
         unsigned int size = this->matrix.size();
         for (size_t i = 0; i < size; i++)
         {
-            if(newMat.matrix.at(i) == 0)
+            if (newMat.matrix.at(i) == 0)
             {
                 continue;
             }
@@ -193,17 +183,17 @@ namespace zich
         return newMat;
     }
     Matrix Matrix::operator*(const Matrix& mat) // MAT * MAT
-    { // code was taken from https://stackoverflow.com/questions/26826545/matrix-multiplication-using-vector
+    {
         if(this->rows!= mat.columns)
         {
             throw runtime_error("Matrices don't have the same size");
         }
         
-        int n = this->rows;     // a rows
-        int m = this->columns;  // a cols
-        int p = mat.columns;  // b cols
+        int n = this->rows;
+        int m = this->columns;
+        int p = mat.columns;
         vector<double> mul((size_t)(n*p), 0.0);
-        double tempItem;
+        double tempItem = 0;
 
         for (size_t j = 0; j < p; ++j)
         {
@@ -220,31 +210,8 @@ namespace zich
         return Matrix(mul,n,p);
     }
     Matrix& Matrix::operator*=(const Matrix& mat) // MAT * MAT
-    { // code was taken from https://stackoverflow.com/questions/26826545/matrix-multiplication-using-vector
-        if(this->rows!= mat.columns)
-        {
-            throw runtime_error("Matrices don't have the same size");
-        }
-        
-        int n = this->rows;     // a rows
-        int m = this->columns;  // a cols
-        int p = mat.columns;  // b cols
-        vector<double> mul((size_t)(n*p), 0.0);
-        double tempItem;
-
-        for (size_t j = 0; j < p; ++j)
-        {
-            for (size_t k = 0; k < m; ++k)
-            {
-                tempItem = 0;
-                for (size_t i = 0; i < n; ++i)
-                {
-                    tempItem += this->matrix.at(i*(size_t)this->columns + k) * mat.matrix.at(k*(size_t)mat.columns + j);
-                }
-                mul.push_back(tempItem);
-            }
-        }
-        *this = Matrix(mul,n,p);
+    {
+        *this = *this * mat;
         return *this;
     }
     Matrix& Matrix::operator*=(const double& num) // MAT *= NUM
@@ -338,6 +305,10 @@ namespace zich
             os << "]\n";
         }
             return os;
+    }
+    istream& operator>>(istream& is, Matrix& mat)
+    {
+        return is;   
     }
 
     // utils

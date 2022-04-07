@@ -18,6 +18,9 @@ test: TestCounter.o Test.o $(OBJECTS)
 tidy:
 	clang-tidy $(SOURCES) -extra-arg=-std=c++2a -checks=bugprone-*,clang-analyzer-*,cppcoreguidelines-*,performance-*,portability-*,readability-*,-cppcoreguidelines-pro-bounds-pointer-arithmetic,-cppcoreguidelines-owning-memory --warnings-as-errors=-* --
 
+valgrind: test
+	valgrind --tool=memcheck $(VALGRIND_FLAGS) ./test 2>&1 | { egrep "lost| at " || true; }
+
 %.o: %.cpp
 	$(CXX) $(CXXFLAGS) --compile $< -o $@
 

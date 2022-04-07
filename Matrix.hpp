@@ -58,7 +58,7 @@ namespace zich
         
         // insertion & extraction
         friend std::ostream& operator<<(std::ostream& os, const Matrix& mat);
-        friend std::istream& operator<<(std::istream& os, const Matrix& mat);
+        friend std::istream& operator>>(std::istream& os, Matrix& mat);
 
         // utils
         friend double matSum(const Matrix& mat);
