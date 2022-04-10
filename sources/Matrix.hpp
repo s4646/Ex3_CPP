@@ -43,11 +43,6 @@ namespace zich
         Matrix& operator*=(const double& num); // MAT *= NUM
         Matrix& operator*=(const Matrix& mat); // MAT *= MAT
         
-        // division
-        friend Matrix operator/(const double& num, const Matrix& mat); // NUM / MAT
-        Matrix operator/(const double& num); // MAT / NUM
-        Matrix& operator/=(const double& num); // MAT /= NUM
-        
         // compare
         bool operator==(const Matrix& mat) const;
         bool operator<=(const Matrix& mat) const;
@@ -58,7 +53,7 @@ namespace zich
         
         // insertion & extraction
         friend std::ostream& operator<<(std::ostream& os, const Matrix& mat);
-        friend std::istream& operator>>(std::istream& os, Matrix& mat);
+        friend std::istream& operator>>(std::istream& is, Matrix& mat);
 
         // utils
         friend double matSum(const Matrix& mat);

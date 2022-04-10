@@ -1,8 +1,13 @@
 #include "Matrix.hpp"
+#include <string>
+#include <cstring>
 #include <stdexcept>
 #include <cmath>
 
 using namespace std;
+
+vector<string> parser(string input, const string& delimiter);
+bool validate(const string& str);
 
 zich::Matrix::Matrix(vector<double> vec, int rows = 0, int columns = 0)
 {
@@ -226,32 +231,6 @@ namespace zich
         return *this;
     }
 
-    // division
-    Matrix operator/(const double& num, const Matrix& mat) // NUM / MAT
-    {
-        if (num == 0)
-        {
-            throw runtime_error("Cannot divide by 0");
-        }
-        return (1/num) * mat;
-    }
-    Matrix Matrix::operator/(const double& num) // MAT / NUM
-    {
-        if (num == 0)
-        {
-            throw runtime_error("Cannot divide by 0");
-        }
-        return *this * (1/num);
-    }
-    Matrix& Matrix::operator/=(const double& num) // MAT /= NUM
-    {
-        if (num == 0)
-        {
-            throw runtime_error("Cannot divide by 0");
-        }
-        return *this *= (1/num);
-    }
-
     // compare
     bool Matrix::operator==(const Matrix& mat) const // MAT == MAT
     {
@@ -328,13 +307,37 @@ namespace zich
                     os << ' ';
                 }
             }
-            os << "]\n";
+            os << (i!=(mat.rows-1) ? "]\n" : "]");
         }
             return os;
     }
     istream& operator>>(istream& is, Matrix& mat)
     {
-        return is;   
+        int rows = 0; int columns = 0;
+        string input;
+        getline(is, input);
+        vector<double> matrix;
+        vector<string> splits = parser(input, ", ");
+        rows = splits.size();
+        for (size_t i = 0; i < splits.size(); i++)
+        {
+            if(!validate(splits.at(i)))
+            {
+                throw invalid_argument("Invalid input");
+            }
+            vector<string> temParse = parser(splits.at(i).substr(1,splits.at(i).size()-1)," ");
+            columns = temParse.size();
+            for (size_t j = 0; j < temParse.size(); j++)
+            {
+                if(temParse.at(j).empty())
+                {
+                    continue;
+                }
+                matrix.push_back(stod(temParse.at(j)));
+            }
+        }
+        mat = Matrix(matrix, rows, columns);
+        return is;
     }
 
     // utils
@@ -348,4 +351,39 @@ namespace zich
         }
         return sum;
     }
+}
+
+vector<string> parser(string input, const string& delimiter)
+{
+    size_t pos = 0;
+    std::string token;
+    vector<string> splits;
+    while ((pos = input.find(delimiter)) != std::string::npos)
+    {
+        token = input.substr(0, pos);
+        splits.push_back(token);
+        input.erase(0, pos + delimiter.size());
+    }
+    splits.push_back(input);
+    return splits;
+}
+bool validate(const string& str)
+{
+    int leftMargains = 0; int rightMargains = 0; int commas = 0;
+    for (size_t i = 0; i < str.size(); i++)
+    {
+        if(str.at(i) == '[')
+        {
+            ++leftMargains;
+        }
+        if(str.at(i) == ']')
+        {
+            ++rightMargains;
+        }
+        if(str.at(i) == ',')
+        {
+            ++commas;
+        }
+    }
+    return leftMargains == 1 && rightMargains == 1 && commas == 0;
 }

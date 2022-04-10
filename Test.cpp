@@ -1,5 +1,5 @@
 #include "doctest.h"
-#include "Matrix.hpp"
+#include "sources/Matrix.hpp"
 
 using namespace std;
 using namespace zich;
@@ -143,72 +143,48 @@ TEST_CASE("GOOD INPUT")
         Matrix temp{vector<double>{-1.86,-2.29,-3.59,-3.39}, 2, 2};
         CHECK(constants2x2 == Matrix{vector<double>{-1.86,-2.29,-3.59,-3.39}, 2, 2});
     }
-    // SUBCASE("MULTIPLICATION")
-    // {
-    //     vector<double> identity =  {1,0,0,0, 
-    //                                 0,1,0,0,
-    //                                 0,0,1,0,
-    //                                 0,0,0,1};
-    //     for (int i = 1; i <= 20; i++)
-    //     {
-    //         vector<double> identityI = {(double)i,0,0,0, 
-    //                                     0,(double)i,0,0,
-    //                                     0,0,(double)i,0,
-    //                                     0,0,0,(double)i};
-    //         Matrix identityIxI{identity,4,4};
-    //         if(i%2 == 0)
-    //         {
-    //             identityIxI*i;
-    //         }
-    //         else
-    //         {
-    //             i*identityIxI;
-    //         }
-    //         CHECK(identityIxI == Matrix{identityI,4,4});
-    //     }
+    SUBCASE("MULTIPLICATION")
+    {
+        vector<double> identity =  {1,0,0,0, 
+                                    0,1,0,0,
+                                    0,0,1,0,
+                                    0,0,0,1};
+        for (int i = 1; i <= 20; i++)
+        {
+            vector<double> identityI = {(double)i,0,0,0, 
+                                        0,(double)i,0,0,
+                                        0,0,(double)i,0,
+                                        0,0,0,(double)i};
+            Matrix identityIxI{identity,4,4};
+            if(i%2 == 0)
+            {
+                identityIxI*i;
+            }
+            else
+            {
+                i*identityIxI;
+            }
+            CHECK(identityIxI == Matrix{identityI,4,4});
+        }
 
-    //      vector<double> x4 = {1.33, 0, 0, 1.33,
-    //                           0, 1.33, 1.33, 0,
-    //                           0, 1.33, 1.33, 0,
-    //                           1.33, 0, 0, 1.33};
-    //     Matrix x4_1{x4, 4, 4};
-    //     Matrix x4_2{x4, 4, 4};
-    //     for (int i = 0; i < 15; i++)
-    //     {
-    //         if(i%2 == 0)
-    //         {
-    //             CHECK_NOTHROW(x4_1 * x4_2);
-    //         }
-    //         else
-    //         {
-    //             CHECK_NOTHROW(x4_2 * x4_1);
-    //         }
-    //     }
-    // }
-    // SUBCASE("DIVISION")
-    // {
-    //     vector<double> identity =  {1,0,0,0, 
-    //                                 0,1,0,0,
-    //                                 0,0,1,0,
-    //                                 0,0,0,1};
-    //     for (int i = 1; i <= 20; i++)
-    //     {
-    //         vector<double> identityI = {(double)i,0,0,0, 
-    //                                     0,(double)i,0,0,
-    //                                     0,0,(double)i,0,
-    //                                     0,0,0,(double)i};
-    //         Matrix identityIxI{identity,4,4};
-    //         if(i%2 == 0)
-    //         {
-    //             identityIxI/i;
-    //         }
-    //         else
-    //         {
-    //             i/identityIxI;
-    //         }
-    //         CHECK(identityIxI == Matrix{identityI,4,4});
-    //     }
-    // }
+         vector<double> x4 = {1.33, 0, 0, 1.33,
+                              0, 1.33, 1.33, 0,
+                              0, 1.33, 1.33, 0,
+                              1.33, 0, 0, 1.33};
+        Matrix x4_1{x4, 4, 4};
+        Matrix x4_2{x4, 4, 4};
+        for (int i = 0; i < 15; i++)
+        {
+            if(i%2 == 0)
+            {
+                CHECK_NOTHROW(x4_1 * x4_2);
+            }
+            else
+            {
+                CHECK_NOTHROW(x4_2 * x4_1);
+            }
+        }
+    }
 }
 
 TEST_CASE("BAD INPUT")
@@ -238,10 +214,5 @@ TEST_CASE("BAD INPUT")
     {
         CHECK_THROWS(identity3x3 * identity4x4);
         CHECK_THROWS(identity4x4 * identity3x3);
-    }
-    SUBCASE("DIVISION")
-    {
-        CHECK_THROWS(identity3x3/0);
-        CHECK_THROWS(0/identity4x4);
     }
 }
