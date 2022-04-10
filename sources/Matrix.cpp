@@ -1,10 +1,15 @@
 #include "Matrix.hpp"
 #include <stdexcept>
+#include <cmath>
 
 using namespace std;
 
 zich::Matrix::Matrix(vector<double> vec, int rows = 0, int columns = 0)
 {
+    if(vec.size() != rows*columns || rows<0 || columns<0)
+    {
+        throw invalid_argument("Invalid input");
+    }
     this->rows = rows;
     this->columns = columns;
     this->matrix = vector<double>(std::move(vec));
@@ -197,9 +202,9 @@ namespace zich
             for (size_t j = 0; j < mat.columns; j++)
             {
                 tempItem = 0;
-                for (size_t k = 0; k < mat.columns; k++)
+                for (size_t k = 0; k < this->columns; k++)
                 {
-                   tempItem += this->matrix.at(i*(size_t)this->columns + k) * mat.matrix.at(k*(size_t)mat.rows + j);
+                    tempItem += this->matrix.at(i*(size_t)this->columns + k) * mat.matrix.at(k*(size_t)mat.columns + j);
                 }
                 mul.push_back(tempItem);
             }
@@ -257,7 +262,7 @@ namespace zich
         unsigned int size = this->matrix.size();
         for (size_t i = 0; i < size; i++)
         {
-            if(this->matrix.at(i) - mat.matrix.at(i) > EPSILON)
+            if(abs(this->matrix.at(i) - mat.matrix.at(i)) > EPSILON)
             {
                 return false;
             }
@@ -271,7 +276,7 @@ namespace zich
             throw runtime_error("Matrices don't have the same size");
         }
         double sum1 = matSum(*this); double sum2 = matSum(mat);
-        return sum1 < sum2;
+        return sum1 <= sum2;
     }
     bool Matrix::operator>=(const Matrix& mat) const // MAT >= MAT
     {
@@ -280,7 +285,7 @@ namespace zich
             throw runtime_error("Matrices don't have the same size");
         }
         double sum1 = matSum(*this); double sum2 = matSum(mat);
-        return sum1 > sum2;
+        return sum1 >= sum2;
     }
     bool Matrix::operator!=(const Matrix& mat) const // MAT != MAT
     {
