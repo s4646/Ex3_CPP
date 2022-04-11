@@ -1,6 +1,5 @@
 #include "Matrix.hpp"
 #include <string>
-#include <cstring>
 #include <stdexcept>
 #include <cmath>
 
@@ -29,7 +28,7 @@ zich::Matrix::~Matrix() {};
 
 namespace zich
 {
-    // addition
+    // ADDITION
     Matrix Matrix::operator+(const double& num) // MAT + NUM
     {
         Matrix newMat(*this);
@@ -40,6 +39,7 @@ namespace zich
         }
         return newMat;
     }
+
     Matrix& Matrix::operator+=(const double& num) // MAT += NUM
     {
         unsigned int size = this->matrix.size();
@@ -49,12 +49,14 @@ namespace zich
         }
         return *this;
     }
+
     Matrix operator+(const double& num, const Matrix& mat) // NUM + MAT
     {
         Matrix newMat(mat);
         newMat + num;
         return newMat;
     }
+
     Matrix Matrix::operator+(const Matrix& mat) // MAT + MAT
     {
         if(this->rows!= mat.rows || this->columns !=mat.columns)
@@ -66,6 +68,7 @@ namespace zich
         newMat += mat;
         return newMat;
     }
+
     Matrix& Matrix::operator+=(const Matrix& mat) // MAT += MAT
     {
         if(this->rows!= mat.rows || this->columns !=mat.columns)
@@ -80,17 +83,20 @@ namespace zich
         }
         return *this;
     }
+
     Matrix Matrix::operator++(int) // Postfix
     {
         Matrix temp = *this;
         ++*this;
         return temp;
     }
+
     Matrix& Matrix::operator++() // Prefix
     {
         *this += 1;
         return *this;
     }
+
     Matrix Matrix::operator+() const // unary
     {
         Matrix newMat(*this);
@@ -102,8 +108,8 @@ namespace zich
         return newMat;
     }
 
-    // substraction
-        Matrix Matrix::operator-(const double& num) // MAT - NUM
+    // SUBSTRACTION 
+    Matrix Matrix::operator-(const double& num) // MAT - NUM
     {
         Matrix newMat(*this);
         unsigned int size = newMat.matrix.size();
@@ -113,6 +119,7 @@ namespace zich
         }
         return newMat;
     }
+
     Matrix& Matrix::operator-=(const double& num) // MAT -= NUM
     {
         unsigned int size = this->matrix.size();
@@ -122,12 +129,14 @@ namespace zich
         }
         return *this;
     }
+
     Matrix operator-(const double& num, const Matrix& mat) // NUM - MAT
     {
         Matrix newMat(mat);
         -(newMat - num);
         return newMat;
     }
+
     Matrix Matrix::operator-(const Matrix& mat) // MAT - MAT
     {
         if(this->rows!= mat.rows || this->columns !=mat.columns)
@@ -139,6 +148,7 @@ namespace zich
         newMat -= mat;
         return newMat;
     }
+
     Matrix& Matrix::operator-=(const Matrix& mat) // MAT -= MAT
     {
         if(this->rows!= mat.rows || this->columns !=mat.columns)
@@ -153,17 +163,20 @@ namespace zich
         }
         return *this;
     }
+
     Matrix Matrix::operator--(int) // Postfix
     {
         Matrix temp = *this;
         --*this;
         return temp;
     }
+
     Matrix& Matrix::operator--() // Prefix
     {
         *this -= 1;
         return *this;
     }
+
     Matrix Matrix::operator-() const // unary
     {
         Matrix newMat(*this);
@@ -179,19 +192,21 @@ namespace zich
         return newMat;
     }
 
-    // multiplication
+    // MULTIPLICATION
     Matrix operator*(const double& num, const Matrix& mat) // NUM * MAT
     {
         Matrix newMat(mat);
         newMat *= num;
         return newMat;
     }
+
     Matrix Matrix::operator*(const double& num) // MAT * NUM
     {
         Matrix newMat(*this);
         newMat *= num;
         return newMat;
     }
+
     Matrix Matrix::operator*(const Matrix& mat) // MAT * MAT
     {
         if(this->columns!= mat.rows)
@@ -203,7 +218,6 @@ namespace zich
 
         for (size_t i = 0; i < this->rows; i++)
         {
-           
             for (size_t j = 0; j < mat.columns; j++)
             {
                 tempItem = 0;
@@ -216,11 +230,13 @@ namespace zich
         }  
         return Matrix(mul,this->rows, mat.columns);
     }
+
     Matrix& Matrix::operator*=(const Matrix& mat) // MAT * MAT
     {
         *this = *this * mat;
         return *this;
     }
+
     Matrix& Matrix::operator*=(const double& num) // MAT *= NUM
     {
         unsigned int size = this->matrix.size();
@@ -231,7 +247,7 @@ namespace zich
         return *this;
     }
 
-    // compare
+    // COMPARE
     bool Matrix::operator==(const Matrix& mat) const // MAT == MAT
     {
         if(this->rows!= mat.rows || this->columns!= mat.columns)
@@ -248,6 +264,7 @@ namespace zich
         }
         return true;
     }
+
     bool Matrix::operator<=(const Matrix& mat) const // MAT <= MAT
     {
         if(this->rows!= mat.rows || this->columns!= mat.columns)
@@ -257,6 +274,7 @@ namespace zich
         double sum1 = matSum(*this); double sum2 = matSum(mat);
         return sum1 <= sum2;
     }
+
     bool Matrix::operator>=(const Matrix& mat) const // MAT >= MAT
     {
         if(this->rows!= mat.rows || this->columns!= mat.columns)
@@ -266,6 +284,7 @@ namespace zich
         double sum1 = matSum(*this); double sum2 = matSum(mat);
         return sum1 >= sum2;
     }
+
     bool Matrix::operator!=(const Matrix& mat) const // MAT != MAT
     {
         if(this->rows!= mat.rows || this->columns!= mat.columns)
@@ -274,6 +293,7 @@ namespace zich
         }
         return !(*this == mat);
     }
+
     bool Matrix::operator<(const Matrix& mat) const // MAT < MAT
     {
         if(this->rows!= mat.rows || this->columns!= mat.columns)
@@ -283,6 +303,7 @@ namespace zich
         double sum1 = matSum(*this); double sum2 = matSum(mat);
         return sum1 < sum2;
     }
+
     bool Matrix::operator>(const Matrix& mat) const // MAT > MAT
     {
         if(this->rows!= mat.rows || this->columns!= mat.columns)
@@ -293,7 +314,7 @@ namespace zich
         return sum1 > sum2;
     }
 
-    // input & output
+    // INPUT & OUTPUT
     ostream& operator<<(ostream& os, const Matrix& mat)
     {
         for (size_t i = 0; i < mat.rows; i++)
@@ -311,20 +332,24 @@ namespace zich
         }
             return os;
     }
+
     istream& operator>>(istream& is, Matrix& mat)
     {
         int rows = 0; int columns = 0;
         string input;
         getline(is, input);
         vector<double> matrix;
+        // parse input into rows
         vector<string> splits = parser(input, ", ");
         rows = splits.size();
         for (size_t i = 0; i < splits.size(); i++)
         {
+            // check for extra chars that are not numbers (except ' ')
             if(!validate(splits.at(i)))
             {
                 throw invalid_argument("Invalid input");
             }
+            // parse rows into numbers
             vector<string> temParse = parser(splits.at(i).substr(1,splits.at(i).size()-1)," ");
             columns = temParse.size();
             for (size_t j = 0; j < temParse.size(); j++)
@@ -333,6 +358,7 @@ namespace zich
                 {
                     continue;
                 }
+                // convert string to double. stod throws exception if string is still illegal
                 matrix.push_back(stod(temParse.at(j)));
             }
         }
@@ -367,6 +393,7 @@ vector<string> parser(string input, const string& delimiter)
     splits.push_back(input);
     return splits;
 }
+
 bool validate(const string& str)
 {
     int leftMargains = 0; int rightMargains = 0; int commas = 0;
