@@ -7,6 +7,7 @@ using namespace std;
 
 vector<string> parser(string input, const string& delimiter);
 bool validate(const string& str);
+bool revalidate(const string& str);
 
 zich::Matrix::Matrix(vector<double> vec, int rows = 0, int columns = 0)
 {
@@ -350,7 +351,7 @@ namespace zich
                 throw invalid_argument("Invalid input");
             }
             // parse rows into numbers
-            vector<string> temParse = parser(splits.at(i).substr(1,splits.at(i).size()-1)," ");
+            vector<string> temParse = parser(splits.at(i).substr(1,splits.at(i).size()-2)," ");
             columns = temParse.size();
             for (size_t j = 0; j < temParse.size(); j++)
             {
@@ -358,7 +359,11 @@ namespace zich
                 {
                     continue;
                 }
-                // convert string to double. stod throws exception if string is still illegal
+                // check if string is a double, then convert
+                if(!revalidate(temParse.at(j)))
+                {
+                    throw invalid_argument("Invalid input");
+                }
                 matrix.push_back(stod(temParse.at(j)));
             }
         }
@@ -413,4 +418,16 @@ bool validate(const string& str)
         }
     }
     return leftMargains == 1 && rightMargains == 1 && commas == 0;
+}
+
+bool revalidate(const string& str)
+{
+    for (size_t i = 0; i < str.size(); i++)
+    {
+        if((str.at(i) < '0' || str.at(i) > '9') && str.at(i) != '.')
+        {
+            return false;
+        }
+    }
+    return true;
 }
